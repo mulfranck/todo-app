@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo | mulfranck</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="/src/index.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <h1>Todo List</h1>
+        </div>
+    </header>
+
+    <main>
+        <aside class="control-panel" id="control-panel">
+            <article class="home-list">
+                <h2>Home <span></span></h2>
+                <div class="c-list" id="c-list">
+                    <button class="today-list" id="today-list">Today</button>
+                    <button class="this-week-list" id="this-week-list">This week</button>
+                </div>
+            </article>
+            <article>
+                <h2>Project</h2>
+                <div class="p-list" id="p-list">
+                    <button>
+                        Default project
+                    </button>
+                </div>
+                <button class="add-project" id="add-project">Add project</button>
+            </article>
+        </aside>
+        <section class="list-container" id="list-container">
+            <section class="todo" id="app">
+                <header >
+                    <h3>Todo</h3>
+                    <button id="adder">+</button>
+                </header>
+                <div class="t-adder hide" id="t-adder">
+                    <form id="t-adder-form">
+                        <div class="t-title">
+                            <input class="common" type="text" name="todo" id="todo" placeholder="Todo title">
+                        </div>
+                        <div class="input">
+                            <select class="common" name="priority" id="t-priority">
+                                <option value="">Select priority</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                            <input class="common" type="date" name="due-date" id="due-date">
+                        </div>
+                        <div class="registers">
+                            <button type="submit" class="add common">Add</button>
+                            <button class="cancel common">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="t-list" id="t-list">
+                    <article class="t-items">
+                        <button class="t-complete"></button>
+                        <p class="t-title">Lorem, ipsum dolor sit</p>
+                        <p class="t-date"></p>
+                        <button class="t-details">Delails</button>
+                    </article>
+                    <article class="t-items">
+                        <button class="t-complete"></button>
+                        <p class="t-title">Lorem, ipsum dolor sit</p>
+                        <p class="t-date"></p>
+                        <button class="t-details">Delails</button>
+                        <span class="t-delete">&times;</span>
+                    </article>
+                </div>
+                
+            </section>
+            <section class="in-progress">
+                <header>
+                    <h3>In Progress</h3>
+                </header>
+                <div class="i-list" id="i-list">
+                    <article class="t-items">
+                        <button class="t-complete"></button>
+                        <p class="t-title">Lorem, ipsum dolor sit</p>
+                        <p class="t-date"></p>
+                        <button class="t-details">Delails</button>
+                    </article>
+                    <article class="t-items">
+                        <button class="t-complete"></button>
+                        <p class="t-title">Lorem, ipsum dolor sit</p>
+                        <p class="t-date"></p>
+                        <button class="t-details">Delails</button>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>All Rights None &copy; mulfranck</p>
+        <a href="http://github.com/mulfranck"></a>
+    </footer>
+
+    <!-- <script src="bundled.js"></script> -->
+</body>
+</html>

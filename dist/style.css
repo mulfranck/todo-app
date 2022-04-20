@@ -21,14 +21,6 @@ body, html {
     width: 100%;
 }
 
-.hide {
-    display: none;
-}
-.active {
-    display: block;
-}
-
-
 /* Header the navbar */
 .header {
     display: flex;
@@ -282,6 +274,14 @@ header > button:hover {
     background-color: var(--p-color);
 }
 
+/********  PRIORITY  ********/
+.hide {
+    display: none !important;
+
+}
+.active {
+    display: block;
+}
 
 
 /* RESPONSIVE DESIGN */

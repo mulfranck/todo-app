@@ -1,18 +1,38 @@
-const todos = { 
-    today : {
-        list : [
-            {
-                title: 'go sport',
-                dueDate: '05/06/456'
-            },
-            {
-                title: 'justifying one',
-                dueDate: '08-99-22'
-            }
-        ],
-        size : 2
-    },
-};
+const projectFactory = (projectName) => {
+    const _name = projectName;
+    const _len = 0;
+    const _list = {};
+
+    // METHOD
+
+    function addInProj(task) {
+        _list[task.id] = task;
+        _len++;
+    }
+
+    function rmTask(task) {
+        return "still thinking"
+    }
+
+    function show(whatProps) {
+        if (whatProps === 'list') {
+            return _list;
+        } else if (whatProps === 'size'){
+            return _len;
+        }
+
+        return _pName;
+    }
+
+    function showAll() {
+        return `Project is ${_pName.toUpperCase()}\n has ${_len} `
+    }
+    return {addInProj, rmTask, show, showAll}
+}
+
+const todoAdderProto = () => {
+    return 
+}
 const todoList = [];
 
 const cte = (tag, cls) => {
@@ -54,10 +74,19 @@ const createTodoContainer = ({title, checked, id}) => {
 
 const $adderBtn = document.querySelector('#adder');
 const $adderModal = document.querySelector('#t-adder');
-const $form = document.forms[0];
+const $todoForm = document.forms[1];
 
 const $todoListHolder = document.getElementById('t-list');
 const $deleteBtn = document.getElementById('t-delete');
+const $projectAdderBtn = document.getElementById('add-project');
+const $projectAdderForm = document.getElementById('project-adder-form');
+
+
+$projectAdderBtn.addEventListener('click', () => {
+    $projectAdderBtn.classList.toggle('hide');
+    $projectAdderForm.classList.toggle('hide');
+})
+
 
 
 
@@ -100,6 +129,13 @@ const deleteTodo = (todoId, domEl) => {
 const renderTodo = (todo) => {
     addChild($todoListHolder, createTodoContainer(todo))
 }
+// const setStorage = (project, todoItem) => {
+//     project.
+//     const jsonIt = JSON.stringify(todoItem);
+
+//     sessionStorage.setItem(project)
+// }
+
 
 
 $adderBtn.addEventListener('click', () => {
@@ -108,11 +144,11 @@ $adderBtn.addEventListener('click', () => {
     $adderBtn.disabled = true; //mk the addBtn unclickable
 })
 
-$form.addEventListener('submit', e => {
+$todoForm.addEventListener('submit', e => {
     e.preventDefault();
-        const title = ($form.elements[0]);
-        const dueDate = $form.elements[1];
-        const priority = $form.elements[2];
+        const title = ($todoForm.elements[0]);
+        const dueDate = $todoForm.elements[1];
+        const priority = $todoForm.elements[2];
         
         if (e.submitter.textContent === 'Add') {
             // submit only if the submitter is the add btn

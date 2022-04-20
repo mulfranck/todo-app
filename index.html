@@ -20,18 +20,26 @@
             <article class="home-list">
                 <h2>Home <span></span></h2>
                 <div class="c-list" id="c-list">
-                    <button class="today-list" id="today-list">Today</button>
-                    <button class="this-week-list" id="this-week-list">This week</button>
+                    <button class="today-list project" id="today-list">Today</button>
+                    <button class="this-week-list project" id="this-week-list">This week</button>
                 </div>
             </article>
             <article>
                 <h2>Project</h2>
-                <div class="p-list" id="p-list">
-                    <button>
-                        Default project
-                    </button>
+                <div class="p-list" id="p-list"></div>
+
+                <button class="add-project project" id="add-project">Add project</button>
+                <div class="project-adder-form">
+                    <form class="p-adder-form">
+                        <div>
+                            <input type="text" name="projectName" id="projectAdderForm" class="common">
+                        </div>
+                        <div class="control">
+                            <button type="submit" class="add common">Add</button>
+                            <button class="cancel common">Cancel</button>
+                        </div>
+                    </form>
                 </div>
-                <button class="add-project" id="add-project">Add project</button>
             </article>
         </aside>
         <section class="list-container" id="list-container">
@@ -54,7 +62,7 @@
                             </select>
                             <input class="common" type="date" name="due-date" id="due-date">
                         </div>
-                        <div class="registers">
+                        <div class="control">
                             <button type="submit" class="add common">Add</button>
                             <button class="cancel common">Cancel</button>
                         </div>

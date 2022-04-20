@@ -67,7 +67,7 @@ main {
     
 }
 
-.control-panel button {
+.control-panel .project {
     border: none;
     display: block;
     text-align: left;
@@ -83,10 +83,25 @@ main {
 .control-panel h2:hover {
     width: 90%;
 }
-.control-panel button:hover {
+.control-panel .project:hover {
     background-color: #393d5dca;
     font-weight: bold;
     cursor: pointer;
+}
+
+.project-adder-form {
+    width: 90%;
+    background-color: rgba(0, 0, 0, 0.373);
+    margin-left: .8rem;
+    padding-bottom: .8rem;
+    border-radius: 8px;
+}
+.project-adder-form form {
+    text-align: center;
+}
+.project-adder-form input {
+    padding: .3rem;
+    margin: .6rem auto;
 }
 
 
@@ -163,7 +178,7 @@ main {
     cursor: pointer;
 }
 
-.t-items button {
+.t-items > button {
     border: none;
     background-color: transparent;
     color: floralwhite;
@@ -227,7 +242,7 @@ header > button:hover {
 }
 
 .input .common {
-    width: 49.5%;
+    width: 49%;
     padding: .3rem;
     margin: .6rem auto;
 }
@@ -241,10 +256,12 @@ header > button:hover {
     border: .1rem solid gray;
 
 }
-.registers {
+.control {
+    /* display: flex; */
+    width: 100%;
     text-align: center;
 }
-.registers button{
+.control button {
     width: 40%;
     padding: .4rem;
 

@@ -31,7 +31,7 @@
 
                 <button class="project" id="add-project">Add project</button>
                 <div id="project-adder-form" class="project-adder-form hide">
-                    <form class="p-adder-form">
+                    <form class="p-adder-form" id="p-adder-form">
                         <div>
                             <input type="text" name="projectName" id="projectAdderForm" class="common">
                         </div>
@@ -51,8 +51,11 @@
                 </header>
                 <div class="t-adder hide" id="t-adder">
                     <form id="t-adder-form">
-                        <div class="t-title">
+                        <div class="input">
                             <input class="common" type="text" name="todo" id="todo" placeholder="Todo title">
+                            <select class="common" name="project" id="projects">
+                                <option value="default">Default</option>
+                            </select>
                         </div>
                         <div class="input">
                             <select class="common" name="priority" id="t-priority">

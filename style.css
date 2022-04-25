@@ -19,31 +19,39 @@ p, button {
 
 body, html {
     width: 100%;
+    overflow-x: hidden;
 }
 
 /* Header the navbar */
 .header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 1.2rem;
     font-size: 1.6rem;
     font-weight: 400;
     background-color: var(--p-color);
     color: floralwhite;
 }
+.nav-icon {
+    display: none;
+}
 
 /* Main content */
 main {
     display: flex;
-    min-height: calc(100vh - 9.2rem);
+    /* position: relative; */
+    min-height: calc(100vh - 10.2rem);
 }
 
 /* The aside content by the left */
 .control-panel {
     width: 30%;
-    min-height: 100%;
+    max-height: 100%;
     background-color: rgb(214, 93, 71);
     color: floralwhite;
     padding-left: 2rem;
+    /* z-index: 99999; */
 }
 
 .control-panel article {
@@ -56,7 +64,6 @@ main {
     border-bottom: 3px solid var(--p-color);
     width: 30%;
     transition: width 1s;     
-    
 }
 
 .control-panel .project {
@@ -90,10 +97,12 @@ main {
 }
 .project-adder-form form {
     text-align: center;
+    width: 98%;
 }
 .project-adder-form input {
+    width: 90%;
     padding: .3rem;
-    margin: .6rem auto;
+    margin: .6rem;
 }
 
 
@@ -298,7 +307,7 @@ header > button:hover {
 
 /********  FOOTER SECTION  ********/
 .footer {
-    padding: 1rem;
+    padding: .5rem;
     color: floralwhite;
     background-color: var(--p-color);
     display: flex;
@@ -330,33 +339,53 @@ header > button:hover {
     display: none !important;
 
 }
-.active {
-    display: block;
-}
 
 
 /* RESPONSIVE DESIGN */
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 830px) {
     .control-panel {
-        display: none;
+        display: block;
+        position: absolute;
+        height: calc(100% - 10.02rem);
+        width: 0;
+        padding-left: 0;
+        right: 0;
+        z-index: 999;
+        transition: .4s;
+        /* background-color: rgb(253, 118, 118) !important; */
     }
-    .list-container {
-        padding: .8rem;
+    .overlay {
+        content: '';
+        position: absolute;
+        display: block;
+        left: -100vw;
+        background-color: rgba(68, 68, 68, 0.468);
+        width: 250%;
+
+        height: 100%;
+    }
+    .nav-icon {
+        display: block;
+    }
+    .nav-icon:hover {
+        cursor: pointer;
+    }
+
+    .show-nav {
+        width: 40%;
+        padding-left: 1rem;
     }
 }
 
 @media  screen and (max-width: 650px) {
     .list-container {
         display: flex;
+        padding: .8rem;
         flex-direction: column;
     }
-    .t-items {
-        justify-content: space-between;
-    }
-    .list-container .todo {
-        border: none;
-    }
+
+    .list-container .todo,
     .list-container .in-progress {
         border: none;
     }

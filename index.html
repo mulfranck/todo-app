@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo | mulfranck</title>
     <link rel="stylesheet" href="style.css">
-    <!-- <script defer src="/src/index.js"></script> -->
-    <script src="bundle.js" defer></script>
+    <link rel="stylesheet" href="/node_modules/fontawesome/css/all.min.css">
+    <script defer src="/src/index.js"></script>
+    <script defer src="/src/ui.js"></script>
+    <!-- <script src="bundle.js" defer></script> -->
+    <link rel="stylesheet" href="tab.css">
 </head>
 <body>
     <header class="header">
@@ -44,22 +47,31 @@
             </article>
         </aside>
         <section class="list-container" id="list-container">
+            
+
+            <section class="tab-header-section">
+                <header class="tab-header">
+                    <button class="tab-link" id="defaultTab">Todo</button>
+                    <button class="tab-link">In Progress</button>
+                </header>
+            </section>
+            <!-- Todo holder section  -->
             <section class="todo" id="app">
-                <header >
-                    <h3>Todo</h3>
+                <header class="todo-header">
+                    <h3 class="tab-link">Todo</h3>
                     <button id="adder">+</button>
                 </header>
                 <div class="t-adder hide" id="t-adder">
                     <form id="t-adder-form">
                         <div class="input">
-                            <input class="common" type="text" name="todo" id="todo" placeholder="Todo title">
+                            <input class="common" type="text" name="todo" id="todo" placeholder="Todo title" value="eat today">
                             <select class="common" name="project" id="projects">
                                 <option value="default">Default</option>
                             </select>
                         </div>
                         <div class="input">
                             <select class="common" name="priority" id="t-priority">
-                                <option value="">Select priority</option>
+                                <option value="easy">Select priority</option>
                                 <option value="easy">Easy</option>
                                 <option value="medium">Medium</option>
                                 <option value="hard">Hard</option>
@@ -72,28 +84,30 @@
                         </div>
                     </form>
                 </div>
-                <div class="t-list" id="t-list">
+
+                <div class="t-list tab-content" id="t-list">
                     <article class="t-items">
                         <button class="t-complete"></button>
                         <p class="t-title">Lorem, ipsum dolor sit</p>
                         <p class="t-date"></p>
-                        <button class="t-details">Delails</button>
+                        <button class="t-details"><i class="fa fa-info"></i></button>
                     </article>
                     <article class="t-items">
                         <button class="t-complete"></button>
                         <p class="t-title">Lorem, ipsum dolor sit</p>
                         <p class="t-date"></p>
-                        <button class="t-details">Delails</button>
+                        <button class="t-details"><i class="fa fa-info"></i></button>
                         <span class="t-delete">&times;</span>
                     </article>
                 </div>
-                
             </section>
+
+            <!-- Progress section -->
             <section class="in-progress">
-                <header>
-                    <h3>In Progress</h3>
+                <header class="todo-header">
+                    <h3 class="tab-link">In Progress</h3>
                 </header>
-                <div class="i-list" id="i-list">
+                <div class="i-list tab-content" id="i-list">
                     <article class="t-items">
                         <button class="t-complete"></button>
                         <p class="t-title">Lorem, ipsum dolor sit</p>

@@ -73,24 +73,33 @@ const createTodoContainer = ({projectName, title, checked, id}) => {
     $itemEl.setAttribute('data-key', id)
     $itemEl.setAttribute('data-p-name', projectName);
 
+    const $rightGrpEl = cte('div', 'right-grp');
+    const $leftGrpEl = cte('div', 'left-grp');
+
     const $inputCheckerEl = cte('input', 't-complete');
     const $titleEl = cte('p', 't-title');
-    const $dateEl = cte('p', 't-date');
-    const $detailEl = cte('button', 't-details');
-    const $deleteEl = cte('p', 't-delete');
+    const $editEl = cte('i',);
+    const $detailEl = cte('i', 't-details');
+    const $deleteEl = cte('i');
 
     $inputCheckerEl.setAttribute('type', 'checkbox')
+    $detailEl.setAttribute('class', 'fa fa-info t-details')
+    $editEl.setAttribute('class', 'fa fa-edit t-edit')
+    $deleteEl.setAttribute('class', 'fa fa-delete t-delete')
+    $deleteEl.setAttribute('id', 't-delete') //to acces from delete method
     $titleEl.innerText = title;
-    $dateEl.innerText = Date.now();
-    $detailEl.innerText = 'Detail';
+    // $dateEl.innerText = Date.now();
+    // $detailEl.innerText = 'Detail';
     $deleteEl.innerHTML = '&times;'
 
-    addChild($itemEl, $inputCheckerEl);
-    addChild($itemEl, $titleEl)
-    addChild($itemEl, $dateEl)
-    addChild($itemEl, $detailEl)
-    addChild($itemEl, $deleteEl)
+    addChild($rightGrpEl, $inputCheckerEl);
+    addChild($rightGrpEl, $titleEl);
+    addChild($leftGrpEl, $editEl);
+    addChild($leftGrpEl, $detailEl);
+    addChild($leftGrpEl, $deleteEl);
 
+    addChild($itemEl, $rightGrpEl);
+    addChild($itemEl, $leftGrpEl);
     return $itemEl;
 }
 
@@ -242,11 +251,11 @@ $projectForm.addEventListener('submit', (e) => {
 })
 
 $todoListHolder.addEventListener('click', (e) => {
-    let attribute = e.target.getAttribute('class');
-    let id = e.target.parentNode.dataset.key;
-    let project = e.target.parentNode.dataset.pName;
+    let attribute = e.target.getAttribute('id');
+    let id = e.target.parentNode.parentNode.dataset.key;
+    let project = e.target.parentNode.parentNode.dataset.pName;
     if (attribute === 't-delete'){
-        deleteTodo(project, id, e.target.parentNode)
+        deleteTodo(project, id, e.target.parentNode.parentNode)
     }
     // // console.log(e.target)
     // if (attribute === 't-complete' | attribute === 't-title'){
@@ -255,5 +264,5 @@ $todoListHolder.addEventListener('click', (e) => {
     //     }
     // }
     // console.log(attribute)
-    console.log(id)
+    console.log(attribute)
 })        

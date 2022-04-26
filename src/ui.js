@@ -17,10 +17,6 @@ window.addEventListener('load', (e) => {
         $progress.style.display = 'none';
         $tabHeader[0].classList.add('active');
     }
-
-    // $h3.forEach(h3 => {
-    //     h3.style.visibility = 'visible';
-    // })
 })
 $tabHeader.forEach(tabLink  => {
     //for each of the tablink open its tabcontent and close the other
@@ -28,7 +24,6 @@ $tabHeader.forEach(tabLink  => {
         if (e.target.textContent === 'Todo') {
             $todo.style.display = 'block'
             $progress.style.display = 'none'
-            // tabLink.classList.toggle('active')
             $tabHeader[0].classList.toggle('active')
             $tabHeader[1].classList.toggle('active')
         }

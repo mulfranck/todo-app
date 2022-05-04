@@ -12,10 +12,13 @@ export const addChild = (parent, child) => {
     return parent;
 }
 
+const $todoListHolder = document.getElementById('t-list');
 
 function renderTodo (todo) {
-    const $todoListHolder = document.getElementById('t-list');
     addChild($todoListHolder, createTodoContainer(todo))
+    let noMsg = document.querySelector('.no-todo');
+    noMsg && noMsg.remove();
+    console.log(noMsg)
 }
 function renderProject(projectName) {
     const $todoProjectHolder = document.getElementById('p-list');
@@ -26,6 +29,17 @@ function removeEl(element){
     element.remove();
 }
 
+const noTodoMsg = (projectName) => {
+    // const $todoListHolder = document.getElementById('t-list');
+    const msg = `No todos for ${projectName}`;
+    let msgEl = cte('div', 'no-todo');
+    msgEl.style.textAlign = 'center';
+    msgEl.style.fontWeight = 'bold';
+    msgEl.style.fontSize = '1.2rem';
+    msgEl.append(msg);
+
+    $todoListHolder.appendChild(msgEl);
+}
 const createTodoContainer = ({projectName, title, checked, id, dueDate, priority}) => {
     // create an article container for the todo
     // with title and id
@@ -74,11 +88,16 @@ const createProjectBtn = (projectName) => {
 
 const populateDom = (todoes) => {
     const $selectOption = document.querySelector('#projects');
+
     for (let todo in todoes) {
         // Allow only the direct properties
         if (todoes.hasOwnProperty(todo)){
-            addChild($selectOption, createProjectBtn(todo))
+            renderProject(todo)
             $selectOption.innerHTML += `<option value=${todo}>${todo}</option>`;
+            if (todoes['default'].len == 0) {
+                noTodoMsg('default');
+                return;
+            }
             for (let aTodo in todoes[todo].list) {
                 if (todoes[todo].list.hasOwnProperty(aTodo))
                 // add dom element to the dom
@@ -88,6 +107,16 @@ const populateDom = (todoes) => {
     }
 }
 
+const populateDomWithProject = (projectName, {list, len}) => {
+    $todoListHolder.innerHTML = ''
+    
+    for (let p in list){
+        renderTodo(list[p])
+    }
+    !len && noTodoMsg(projectName);
+}
 
 
-export {populateDom, renderTodo, renderProject, removeEl }
+
+
+export {populateDom, populateDomWithProject, renderTodo, renderProject, removeEl }

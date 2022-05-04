@@ -1,4 +1,4 @@
-import {renderTodo, populateDom, renderProject, removeEl } from "./domManipulator.js"
+import {renderTodo, populateDom, renderProject, removeEl, populateDomWithProject } from "./domManipulator.js"
 import Todo from "./todo.js";
 import { ProjectList } from "./project.js";
 import Storage from "./storage.js";
@@ -36,7 +36,7 @@ let $tabHeader = document.querySelectorAll('.tab-link');
 let $h3 = document.querySelectorAll('.list-container h3');
 let $navIcon = document.querySelector('.nav-icon');
 
-
+const $pList = document.querySelector('#p-list');
 
 
 
@@ -90,8 +90,18 @@ const shower = () => {
     $navIcon.firstChild.classList.toggle('fa-times');
     document.querySelector('.control-panel').classList.toggle('show-nav')
 }
+const loadProject = (e) => {
+    console.log(e.target)
+    let project = e.target.getAttribute('id');
+    shower();
+    if ( project in todoList) {
+        populateDomWithProject(project, todoList[project])
+    }
+}
 
 $navIcon.addEventListener('click', shower)
+
+$pList.addEventListener('click', loadProject)
 
 // remove the aside if click on overlay 
 document.querySelector('.overlay').addEventListener('click', shower)
@@ -150,10 +160,9 @@ $todoForm.addEventListener('submit', e => {
 })
 $projectForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (e.submitter.textContent === 'Add') {
-        // Collect the project name
-        let projectName = ($projectForm.elements[0].value)
-
+    // Collect the project name
+    let projectName = ($projectForm.elements[0].value)
+    if (e.submitter.textContent === 'Add' && projectName != '') {
         // Add project to the overall todo list.
         todoList.addProject(projectName);
         Storage.saveTodos(todoList);

@@ -1,90 +1,18 @@
-const projectFactory = (projectName) => {
-    const list = {};
-    let len = 0;
+import { createTodoContainer } from "./dom/createTodoContainer.js"
+import { addTodo, deleteTodo, todoFact} from "./todo.js";
+import { cte, addChild } from "./general.js"
+import { Storage } from "./project.js";
 
-    return {list, len}
-}
 
-let todoList = {};
-
-todoList.__proto__.addInProj = function(projectName, task) {
-        task.projectName = projectName;
-        console.log(task);
-        this.list[task.id] = task;
-        this.len++;
-    }
-
-    todoList.__proto__.rmTask = function(project, taskId) {
-        if (taskId in this[project].list) {
-            delete this[project].list[taskId];
-        }
-        return this[project].list;
-    }
-
-    todoList.__proto__.toggle = function (taskid) {
-        this.list[taskid].checked != this.list[taskId].checked;
-        return list[taskid].checked;
-    }
-
-// This is the overall todo list
-todoList.__proto__.addProject = function (projectName) {
-    this[projectName] = projectFactory(projectName);
-}
 
 // instantiating the overall list with a default project
-todoList.default = projectFactory('default');
+let todoList = new Storage('default');
 
-/**************** GENERAL FUNCTIONS *******************/ 
-const cte = (tag, cls) => {
-    const el = document.createElement(tag);
-    cls ? el.classList.add(cls) : null;
-    return el;
-}
-const addChild = (parent, child) => {
-    parent.appendChild(child);
-    return parent;
-}
-
-const createTodoContainer = ({projectName, title, checked, id, dueDate, priority}) => {
-    // create an article container for the todo
-    // with title and id
-    const $itemEl = cte('article')
-    $itemEl.setAttribute('class', `t-items${checked? ' done':''}`);
-    $itemEl.setAttribute('data-key', id)
-    $itemEl.setAttribute('data-p-name', projectName);
-
-    const $rightGrpEl = cte('div', 'right-grp');
-    const $leftGrpEl = cte('div', 'left-grp');
-
-    const $inputCheckerEl = cte('input', 't-complete');
-    const $titleEl = cte('p', 't-title');
-    const $editEl = cte('i',);
-    const $detailEl = cte('i', 't-details');
-    const $deleteEl = cte('i');
-
-    $inputCheckerEl.setAttribute('type', 'checkbox')
-    $detailEl.setAttribute('class', 'fa fa-info t-details')
-    $editEl.setAttribute('class', 'fa fa-edit t-edit')
-    $deleteEl.setAttribute('class', 'fa fa-delete t-delete')
-    $deleteEl.setAttribute('id', 't-delete') //to acces from delete method
-    $titleEl.innerText = title;
-    $deleteEl.innerHTML = '&times;'
-
-    addChild($rightGrpEl, $inputCheckerEl);
-    addChild($rightGrpEl, $titleEl);
-    addChild($leftGrpEl, $editEl);
-    addChild($leftGrpEl, $detailEl);
-    addChild($leftGrpEl, $deleteEl);
-
-    addChild($itemEl, $rightGrpEl);
-    addChild($itemEl, $leftGrpEl);
-    return $itemEl;
-}
 
 
 /**************** COLLECTING DOM ELEMENTS *******************/ 
 const $adderBtn = document.querySelector('#adder');
-const $adderModal = document.querySelector('#t-adder');
+const $todoAdderModal = document.querySelector('#t-adder');  
 const $projectForm = document.querySelector('#p-adder-form');
 const $todoForm = document.forms[1];
 const $selectOption = document.querySelector('#projects');
@@ -96,71 +24,12 @@ const $projectAdderBtn = document.getElementById('add-project');
 const $projectAdderFormTogger = document.getElementById('project-adder-form');
 
 
-// Create a todo item object
-const todoFact = (title, priority, dueDate) => {
-    return {title, priority, dueDate, checked: false, id: Date.now()}
+
+const managePassedUpAdd = (project, todo) => {
+    todoList.addInProj(project, todo)
 }
-
-
-const addTodo = (project, title, priority, dueDate) => {
-    //create the todo and give it to todo
-    const todo = (todoFact(title, priority, dueDate))
-    // select the project form the list of todoes and add this todo item to it.
-    todoList[project].addInProj(project, todo);
-
-    setStorage();
-    // and render the item on the dom
-    renderTodo(todo);
-}
-
-const toggleDone = (project, todoId) => {
-    // Toggle the Done status and return true or false
-   return todoList[project].toggle(todoId);
-}
-
-const deleteTodo = (project, todoId, domEl) => {
+const managePassedUpDel = (project, todoId) => {
     todoList.rmTask(project, todoId) //remove task from project passed
-    domEl.remove(); //remove from the dom
-}
-
-const renderTodo = (todo) => {
-    addChild($todoListHolder, createTodoContainer(todo))
-}
-
-/**************** STORAGE MANAGING *******************/ 
-
-const setStorage = () => {
-    // Stringify the todoes 
-    let toStore = Object.assign({}, todoList);
-    const jsonIt = JSON.stringify(toStore);
-    
-    // add the stringify object to the projects name object in the storage
-    sessionStorage.setItem('todoList', jsonIt)
-}
-const getTodoesFromStorage = () => {
-    let todoes = sessionStorage.getItem('todoList')
-    return todoes;
-}
-const populateTodoList = (todoes) => {
-    for (todo in todoes) {
-        if (todoes.hasOwnProperty(todo)){
-            todoList[todo] = todoes[todo];
-        }
-    } 
-}
-const populateDom = (todoes) => {
-    for (todo in todoes) {
-        // Allow only the direct properties
-        if (todoes.hasOwnProperty(todo)){
-            $selectOption.firstChild.remove()
-            $selectOption.innerHTML += `<option value=${todo}>${todo}</option>`;
-            for (aTodo in todoes[todo].list) {
-                if (todoes[todo].list.hasOwnProperty(aTodo))
-                // add dom element to the dom
-                renderTodo(todoes[todo].list[aTodo])
-            }
-        }
-    }
 }
 
 
@@ -170,6 +39,13 @@ let $tabHeader = document.querySelectorAll('.tab-link');
 let $h3 = document.querySelectorAll('.list-container h3');
 let navIcon = document.querySelector('.nav-icon');
 
+
+
+
+const renderTodo = (todo) => {
+    const $todoListHolder = document.getElementById('t-list');
+    addChild($todoListHolder, createTodoContainer(todo))
+}
 
 
 
@@ -187,18 +63,20 @@ window.addEventListener('load', (e) => {
 })
 $tabHeader.forEach(tabLink  => {
     //for each of the tablink open its tabcontent and close the other
+    const repeated = () => {
+        $tabHeader[0].classList.toggle('active');
+        $tabHeader[1].classList.toggle('active');
+    }
     tabLink.addEventListener('click', e => {
         if (e.target.textContent === 'Todo') {
-            $todo.style.display = 'block'
-            $progress.style.display = 'none'
-            $tabHeader[0].classList.toggle('active')
-            $tabHeader[1].classList.toggle('active')
+            $todo.style.display = 'block';
+            $progress.style.display = 'none';
+            repeated();
         }
         if (e.target.textContent === ('In Progress')) {
-            $todo.style.display = 'none'
-            $progress.style.display = 'block'
-            $tabHeader[1].classList.toggle('active')
-            $tabHeader[0].classList.toggle('active')
+            $todo.style.display = 'none';
+            $progress.style.display = 'block';
+            repeated();
 
         }
     })
@@ -229,7 +107,7 @@ document.querySelector('.overlay').addEventListener('click', () => {
 
 
 $adderBtn.addEventListener('click', () => {
-    $adderModal.classList.toggle('hide')
+    $todoAdderModal.classList.toggle('hide')
     $adderBtn.style.backgroundColor = 'rgb(214, 93, 71)'
     $adderBtn.disabled = true; //mk the addBtn unclickable
 })
@@ -248,18 +126,27 @@ $todoForm.addEventListener('submit', e => {
     if (e.submitter.textContent === 'Add') {
         // submit only if the submitter is the add btn
         if (title.value !== '' && dueDate.value !== '' && priority.value !== ''){
-            addTodo(project.value, title.value, priority.value, dueDate.value);
-            title.value = priority.value = '';
+            const todo = todoFact(
+                project.value, 
+                title.value, 
+                priority.value, 
+                dueDate.value
+            )
+            addTodo(managePassedUpAdd, project.value, todo);
+            // and render the item on the dom
+            renderTodo(todo);
+            title.value = '';
+            priority.value = 'Easy';
             dueDate.value = '';
-            $adderModal.classList.toggle('hide');
+            $todoAdderModal.classList.toggle('hide');
             $adderBtn.style.backgroundColor = ''
             $adderBtn.disabled = false; //when submited mk adderbtn clickable
         } else {
             alert('The fields most not be empty!')
         }
     }
-    if (e.submitter.textContent === 'Cancel'){
-        $adderModal.classList.toggle('hide');
+    if (e.submitter.textContent !== 'Add'){
+        $todoAdderModal.classList.toggle('hide');
         $adderBtn.style.backgroundColor = ''
         $adderBtn.disabled = false;
         
@@ -300,18 +187,18 @@ $projectForm.addEventListener('submit', (e) => {
 
 $todoListHolder.addEventListener('click', (e) => {
     let attribute = e.target.getAttribute('id');
-    let id = e.target.parentNode.parentNode.dataset.key;
+    let todoEl = e.target.parentNode.parentNode
     let project = e.target.parentNode.parentNode.dataset.pName;
     if (attribute === 't-delete'){
-        deleteTodo(project, id, e.target.parentNode.parentNode)
-        setStorage(todoList);
+        deleteTodo(managePassedUpDel, project, todoEl.dataset.key)
+        todoEl.remove(); //remove from the dom
     }
-    console.log(attribute)
+    console.log(todoEl)
 })
 
-window.addEventListener('load', e => {
-    let t = JSON.parse(getTodoesFromStorage());
-    populateTodoList(t)
-    populateDom(todoList);
-})
+// window.addEventListener('load', e => {
+//     let t = JSON.parse(getTodoesFromStorage());
+//     populateTodoList(t)
+//     populateDom(todoList);
+// })
 

@@ -6,10 +6,6 @@ export const cte = (tag, cls) => {
     return el;
 }
 
-export const display = () => {
-    console.log('this is from the general file.')
-}
-
 export const addChild = (parent, child) => {
     parent.appendChild(child);
 

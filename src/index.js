@@ -1,18 +1,23 @@
-import { createProjectBtn, createTodoContainer } from "./dom/createTodoContainer.js"
+import {renderTodo, populateDom, renderProject, removeEl } from "./domManipulator.js"
 import { addTodo, deleteTodo, todoFact} from "./todo.js";
-import { cte, addChild } from "./general.js"
 import { ProjectList } from "./project.js";
 import Storage from "./storage.js";
-import populateDom from "./dom/renderTodo.js";
 
 
 let todoList = new ProjectList();
 todoList.addProject('default');
-// If there are todos load them.
+// If there are todos load them and render
 Object.assign(todoList, Storage.loadTodos());
-populateDom(managePassedRenderer, todoList);
+populateDom(todoList);
 
 
+/**************** Manage Global var *******************/ 
+const managePassedUpAdd = (project, todo) => {
+    todoList.addInProj(project, todo)
+}    
+const managePassedUpDel = (project, todoId) => {
+    todoList.rmTask(project, todoId)
+}
 
 /**************** COLLECTING DOM ELEMENTS *******************/ 
 const $adderBtn = document.querySelector('#adder');
@@ -22,35 +27,14 @@ const $todoForm = document.forms[1];
 const $selectOption = document.querySelector('#projects');
 
 const $todoListHolder = document.getElementById('t-list');
-const $todoProjectHolder = document.getElementById('p-list');
 const $projectAdderBtn = document.getElementById('add-project');
 const $projectAdderFormTogger = document.getElementById('project-adder-form');
-
-
-
-
-function renderTodo (todo) {
-    const $todoListHolder = document.getElementById('t-list');
-    addChild($todoListHolder, createTodoContainer(todo))
-}
-
-
-const managePassedUpAdd = (project, todo) => {
-    todoList.addInProj(project, todo)
-}    
-const managePassedUpDel = (project, todoId) => {
-    todoList.rmTask(project, todoId) //remove task from project passed
-}    
-function managePassedRenderer(todo) {
-    renderTodo(todo)
-}    
-
 
 let $todo = document.querySelector('.todo')
 let $progress = document.querySelector('.in-progress');
 let $tabHeader = document.querySelectorAll('.tab-link');
 let $h3 = document.querySelectorAll('.list-container h3');
-let navIcon = document.querySelector('.nav-icon');
+let $navIcon = document.querySelector('.nav-icon');
 
 
 
@@ -68,6 +52,16 @@ window.addEventListener('load', (e) => {
         $tabHeader[0].classList.add('active');
     }
 })
+window.addEventListener('resize', e => {
+    if (e.currentTarget.innerWidth > 650) {
+        $todo.style.display = $progress.style.display = 'block'
+        $h3.forEach(h3 => h3.style.visibility = 'visible');
+    } else {
+        $h3.forEach(h3 => h3.style.visibility = 'hidden');
+        $progress.style.display = 'none'
+    }
+})
+
 $tabHeader.forEach(tabLink  => {
     //for each of the tablink open its tabcontent and close the other
     const repeated = () => {
@@ -89,29 +83,23 @@ $tabHeader.forEach(tabLink  => {
     })
 });
 
-window.addEventListener('resize', e => {
-    if (e.currentTarget.innerWidth > 650) {
-        $todo.style.display = $progress.style.display = 'block'
-        $h3.forEach(h3 => h3.style.visibility = 'visible');
-    } else {
-        $h3.forEach(h3 => h3.style.visibility = 'hidden');
-        $progress.style.display = 'none'
-    }
-})
+/**************** ASIDE NAV ELEMENT *******************/ 
 
-// change nav icon on mouse over to a cross
-navIcon.addEventListener('click', e => {
-    navIcon.firstChild.classList.remove('fa-bars');
-    navIcon.firstChild.classList.add('fa-times');
+const shower = () => {
+    $navIcon.firstChild.classList.toggle('fa-bars');
+    $navIcon.firstChild.classList.toggle('fa-times');
     document.querySelector('.control-panel').classList.toggle('show-nav')
-})
-// remove the aside if a the is a click anywhere
-document.querySelector('.overlay').addEventListener('click', () => {
-    navIcon.firstChild.classList.add('fa-bars');
-    navIcon.firstChild.classList.remove('fa-times');
-    document.querySelector('.control-panel').classList.toggle('show-nav')
-} )
+}
 
+$navIcon.addEventListener('click', shower)
+
+// remove the aside if click on overlay 
+document.querySelector('.overlay').addEventListener('click', shower)
+
+
+
+
+/**************** ADDERS: TODO AND PROJECT *******************/ 
 
 $adderBtn.addEventListener('click', () => {
     $todoAdderModal.classList.toggle('hide')
@@ -169,8 +157,7 @@ $projectForm.addEventListener('submit', (e) => {
         // Add project to the overall todo list.
         todoList.addProject(projectName);
         Storage.saveTodos(todoList);
-        
-        addChild($todoProjectHolder, createProjectBtn(projectName))
+        renderProject(projectName);
         // Add the project name to the select option to the todo form elements.
         $selectOption.innerHTML += `<option value=${projectName}>${projectName}</option>`;
 
@@ -190,20 +177,16 @@ $projectForm.addEventListener('submit', (e) => {
     }
 })
 
+
+/**************** TODO ITEMS FUNCTIONS *******************/ 
+
 $todoListHolder.addEventListener('click', (e) => {
     let attribute = e.target.getAttribute('id');
     let todoEl = e.target.parentNode.parentNode
     let project = e.target.parentNode.parentNode.dataset.pName;
     if (attribute === 't-delete'){
         deleteTodo(managePassedUpDel, project, todoEl.dataset.key)
-        todoEl.remove(); //remove from the dom
+        removeEl(todoEl);
         Storage.saveTodos(todoList);
     }
 })
-
-// window.addEventListener('load', e => {
-//     let t = JSON.parse(getTodoesFromStorage());
-//     populateTodoList(t)
-//     populateDom(todoList);
-// })
-

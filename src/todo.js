@@ -5,9 +5,6 @@ const todoFact = (projectName, title, priority, dueDate) => {
 
 
 const addTodo = (managePassedUp, project, todo) => {
-    //create the todo and give it to todo
-    // const todo = todoFact(project, title, priority, dueDate)
-    // select the project form the list of todoes and add this todo item to it.
     managePassedUp(project, todo)
 }
 

@@ -1,4 +1,30 @@
-import { cte, addChild } from "../general.js";
+export const cte = (tag, cls) => {
+    const el = document.createElement(tag);
+
+    cls ? el.classList.add(cls) : null;
+
+    return el;
+}
+
+export const addChild = (parent, child) => {
+    parent.appendChild(child);
+
+    return parent;
+}
+
+
+function renderTodo (todo) {
+    const $todoListHolder = document.getElementById('t-list');
+    addChild($todoListHolder, createTodoContainer(todo))
+}
+function renderProject(projectName) {
+    const $todoProjectHolder = document.getElementById('p-list');
+    addChild($todoProjectHolder, createProjectBtn(projectName))
+}
+
+function removeEl(element){
+    element.remove();
+}
 
 const createTodoContainer = ({projectName, title, checked, id, dueDate, priority}) => {
     // create an article container for the todo
@@ -46,4 +72,22 @@ const createProjectBtn = (projectName) => {
     return projectBtnEl;
 }
 
-export { createTodoContainer, createProjectBtn };
+const populateDom = (todoes) => {
+    const $selectOption = document.querySelector('#projects');
+    for (let todo in todoes) {
+        // Allow only the direct properties
+        if (todoes.hasOwnProperty(todo)){
+            addChild($selectOption, createProjectBtn(todo))
+            $selectOption.innerHTML += `<option value=${todo}>${todo}</option>`;
+            for (let aTodo in todoes[todo].list) {
+                if (todoes[todo].list.hasOwnProperty(aTodo))
+                // add dom element to the dom
+                renderTodo(todoes[todo].list[aTodo])
+            }
+        }
+    }
+}
+
+
+
+export {populateDom, renderTodo, renderProject, removeEl }

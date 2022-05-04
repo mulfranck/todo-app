@@ -1,5 +1,5 @@
 import {renderTodo, populateDom, renderProject, removeEl } from "./domManipulator.js"
-import { addTodo, deleteTodo, todoFact} from "./todo.js";
+import Todo from "./todo.js";
 import { ProjectList } from "./project.js";
 import Storage from "./storage.js";
 
@@ -121,13 +121,13 @@ $todoForm.addEventListener('submit', e => {
     if (e.submitter.textContent === 'Add') {
         // submit only if the submitter is the add btn
         if (title.value !== '' && dueDate.value !== '' && priority.value !== ''){
-            const todo = todoFact(
+            const todo = new Todo(
                 project.value, 
                 title.value, 
                 priority.value, 
                 dueDate.value
             )
-            addTodo(managePassedUpAdd, project.value, todo);
+            Todo.addTodo(managePassedUpAdd, project.value, todo);
             // and render the item on the dom
             renderTodo(todo);
             Storage.saveTodos(todoList)
@@ -185,8 +185,8 @@ $todoListHolder.addEventListener('click', (e) => {
     let todoEl = e.target.parentNode.parentNode
     let project = e.target.parentNode.parentNode.dataset.pName;
     if (attribute === 't-delete'){
-        deleteTodo(managePassedUpDel, project, todoEl.dataset.key)
-        removeEl(todoEl);
+        Todo.deleteTodo(managePassedUpDel, project, todoEl.dataset.key)
         Storage.saveTodos(todoList);
+        removeEl(todoEl);
     }
 })

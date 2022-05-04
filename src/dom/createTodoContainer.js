@@ -36,4 +36,14 @@ const createTodoContainer = ({projectName, title, checked, id, dueDate, priority
     return $itemEl;
 }
 
-export { createTodoContainer };
+
+const createProjectBtn = (projectName) => {
+// render the project name to the dom
+    let projectBtnEl = cte('button', 'project');
+    projectBtnEl.setAttribute('id', projectName);
+    projectBtnEl.innerText = projectName;
+
+    return projectBtnEl;
+}
+
+export { createTodoContainer, createProjectBtn };

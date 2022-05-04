@@ -1,12 +1,16 @@
-import { createTodoContainer } from "./dom/createTodoContainer.js"
+import { createProjectBtn, createTodoContainer } from "./dom/createTodoContainer.js"
 import { addTodo, deleteTodo, todoFact} from "./todo.js";
 import { cte, addChild } from "./general.js"
-import { Storage } from "./project.js";
+import { ProjectList } from "./project.js";
+import Storage from "./storage.js";
+import populateDom from "./dom/renderTodo.js";
 
 
-
-// instantiating the overall list with a default project
-let todoList = new Storage('default');
+let todoList = new ProjectList();
+todoList.addProject('default');
+// If there are todos load them.
+Object.assign(todoList, Storage.loadTodos());
+populateDom(managePassedRenderer, todoList);
 
 
 
@@ -19,18 +23,27 @@ const $selectOption = document.querySelector('#projects');
 
 const $todoListHolder = document.getElementById('t-list');
 const $todoProjectHolder = document.getElementById('p-list');
-const $deleteBtn = document.getElementById('t-delete');
 const $projectAdderBtn = document.getElementById('add-project');
 const $projectAdderFormTogger = document.getElementById('project-adder-form');
 
 
 
+
+function renderTodo (todo) {
+    const $todoListHolder = document.getElementById('t-list');
+    addChild($todoListHolder, createTodoContainer(todo))
+}
+
+
 const managePassedUpAdd = (project, todo) => {
     todoList.addInProj(project, todo)
-}
+}    
 const managePassedUpDel = (project, todoId) => {
     todoList.rmTask(project, todoId) //remove task from project passed
-}
+}    
+function managePassedRenderer(todo) {
+    renderTodo(todo)
+}    
 
 
 let $todo = document.querySelector('.todo')
@@ -40,12 +53,6 @@ let $h3 = document.querySelectorAll('.list-container h3');
 let navIcon = document.querySelector('.nav-icon');
 
 
-
-
-const renderTodo = (todo) => {
-    const $todoListHolder = document.getElementById('t-list');
-    addChild($todoListHolder, createTodoContainer(todo))
-}
 
 
 
@@ -135,6 +142,7 @@ $todoForm.addEventListener('submit', e => {
             addTodo(managePassedUpAdd, project.value, todo);
             // and render the item on the dom
             renderTodo(todo);
+            Storage.saveTodos(todoList)
             title.value = '';
             priority.value = 'Easy';
             dueDate.value = '';
@@ -160,12 +168,9 @@ $projectForm.addEventListener('submit', (e) => {
 
         // Add project to the overall todo list.
         todoList.addProject(projectName);
-        // render the project name to the dom
-        let projectBtnEl = cte('button', 'project');
-        projectBtnEl.setAttribute('id', projectName);
-        projectBtnEl.innerText = projectName;
-
-        addChild($todoProjectHolder, projectBtnEl)
+        Storage.saveTodos(todoList);
+        
+        addChild($todoProjectHolder, createProjectBtn(projectName))
         // Add the project name to the select option to the todo form elements.
         $selectOption.innerHTML += `<option value=${projectName}>${projectName}</option>`;
 
@@ -192,8 +197,8 @@ $todoListHolder.addEventListener('click', (e) => {
     if (attribute === 't-delete'){
         deleteTodo(managePassedUpDel, project, todoEl.dataset.key)
         todoEl.remove(); //remove from the dom
+        Storage.saveTodos(todoList);
     }
-    console.log(todoEl)
 })
 
 // window.addEventListener('load', e => {

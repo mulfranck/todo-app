@@ -6,11 +6,7 @@ class Project{
 }
 
 
-export class Storage {
-    constructor(project) {
-        this[project] = new Project(project);
-    }
-
+export class ProjectList {
     addInProj(pName, task) {
         this[pName].list[task.id] = task;
         this[pName].len++;

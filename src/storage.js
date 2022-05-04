@@ -1,39 +1,40 @@
+import { ProjectList } from "./project.js";
 
-/**************** STORAGE MANAGING *******************/ 
 
-const setStorage = () => {
+/**************** STORAGE MANAGING *******************/
+const LOCAL_PREF = 'TODO-ADD' 
+const TODO_KEY =   `${LOCAL_PREF}-todoList`
+
+
+class Storage {
+    static saveTodos(todos){
     // Stringify the todoes 
-    let toStore = Object.assign({}, todoList);
-    const jsonIt = JSON.stringify(toStore);
+    const todoJson = JSON.stringify(todos);
     
     // add the stringify object to the projects name object in the storage
-    sessionStorage.setItem('todoList', jsonIt)
-}
-const getTodoesFromStorage = () => {
-    let todoes = sessionStorage.getItem('todoList')
-    return todoes;
-}
-const populateTodoList = (todoes) => {
-    for (todo in todoes) {
-        if (todoes.hasOwnProperty(todo)){
-            todoList[todo] = todoes[todo];
+    sessionStorage.setItem(TODO_KEY, todoJson)
+    }
+
+    static loadTodos() {
+        let todoes = sessionStorage.getItem(TODO_KEY)
+        // console.log(todoes)
+        const c = (JSON.parse(todoes));
+        // console.log(Object.keys(c))
+        // console.log(Object.values(c))
+        let pl = {}
+        for ( let p in c) {
+            pl[p] = c[p]; 
         }
-    } 
-}
-const populateDom = (todoes) => {
-    for (todo in todoes) {
-        // Allow only the direct properties
-        if (todoes.hasOwnProperty(todo)){
-            $selectOption.firstChild.remove()
-            $selectOption.innerHTML += `<option value=${todo}>${todo}</option>`;
-            for (aTodo in todoes[todo].list) {
-                if (todoes[todo].list.hasOwnProperty(aTodo))
-                // add dom element to the dom
-                renderTodo(todoes[todo].list[aTodo])
-            }
-        }
+        return pl;
     }
 }
 
+// const populateTodoList = (todoes) => {
+//     for (todo in todoes) {
+//         if (todoes.hasOwnProperty(todo)){
+//             todoList[todo] = todoes[todo];
+//         }
+//     } 
+// }
 
-export {populateDom, populateTodoList, setStorage}
+export default Storage;
